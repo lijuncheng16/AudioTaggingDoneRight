@@ -26,7 +26,11 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
+pretrained_models/
+egs/audioset/exp/
+egs/speechcommands/exp/
+egs/esc50/exp/
+egs/audioset/data/datafiles/
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.

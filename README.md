@@ -11,44 +11,7 @@
  - [Use Pretrained Model For Downstream Tasks](#Use-Pretrained-Model-For-Downstream-Tasks)
  - [Contact](#Contact)
 
-## News
 
-Nov, 2021: The [PSLA training pipeline](https://arxiv.org/abs/2102.01243) used to train AST and baseline efficientnet model code is released [here](https://github.com/YuanGongND/psla). It is a strong audio classification training pipeline that can be used for most deep learning models. Also, it has a one-click FSD50K recipe that achieves SOTA 0.567 mAP.
-
-## Introduction  
-
-<p align="center"><img src="https://github.com/YuanGongND/ast/blob/master/ast.png?raw=true" alt="Illustration of AST." width="300"/></p>
-
-This repository contains the official implementation (in PyTorch) of the **Audio Spectrogram Transformer (AST)** proposed in the Interspeech 2021 paper [AST: Audio Spectrogram Transformer](https://arxiv.org/abs/2104.01778) (Yuan Gong, Yu-An Chung, James Glass).  
-
-AST is the first **convolution-free, purely** attention-based model for audio classification which supports variable length input and can be applied to various tasks. We evaluate AST on various audio classification benchmarks, where it achieves new state-of-the-art results of 0.485 mAP on AudioSet, 95.6% accuracy on ESC-50, and 98.1% accuracy on Speech Commands V2.  For details, please refer to the paper and the [ISCA SIGML talk](https://www.youtube.com/watch?v=CSRDbqGY0Vw).  
-  
-Please have a try! AST can be used with a few lines of code, and we also provide recipes to reproduce the SOTA results on AudioSet, ESC-50, and Speechcommands with almost one click.  
-
-The AST model file is in `src/models/ast_models.py`, the recipes are in `egs/[audioset,esc50,speechcommands]/run.sh`, when you run `run.sh`, it will call `/src/run.py`, which will then call `/src/dataloader.py` and `/src/traintest.py`, which will then call `/src/models/ast_models.py`.
-
-## Citing  
-Please cite our paper(s) if you find this repository useful. The first paper proposes the Audio Spectrogram Transformer while the second paper describes the training pipeline that we applied on AST to achieve the new state-of-the-art on AudioSet.   
-```  
-@inproceedings{gong21b_interspeech,
-  author={Yuan Gong and Yu-An Chung and James Glass},
-  title={{AST: Audio Spectrogram Transformer}},
-  year=2021,
-  booktitle={Proc. Interspeech 2021},
-  pages={571--575},
-  doi={10.21437/Interspeech.2021-698}
-}
-```  
-```  
-@ARTICLE{gong_psla, 
-    author={Gong, Yuan and Chung, Yu-An and Glass, James},  
-    journal={IEEE/ACM Transactions on Audio, Speech, and Language Processing},   
-    title={PSLA: Improving Audio Tagging with Pretraining, Sampling, Labeling, and Aggregation},   
-    year={2021}, 
-    doi={10.1109/TASLP.2021.3120633}
-}
-```  
-  
 ## Getting Started  
 
 Step 1. Clone or download this repository and set it as the working directory, create a virtual environment and install the dependencies.
@@ -193,8 +156,4 @@ If you want to use our training pipeline, you would need to modify below for you
 To summarize, to use our training pipeline, you need to creat data files and modify the above three python scripts. You can refer to our ESC-50 and Speechcommands recipes.
 
 Also, please note that we use `16kHz` audios for the pretrained model, so if you want to use the pretrained model, please prepare your data in `16kHz`.
-
-
- ## Contact
-If you have a question, please bring up an issue (preferred) or send me an email yuangong@mit.edu.
 

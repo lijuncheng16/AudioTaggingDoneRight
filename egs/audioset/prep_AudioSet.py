@@ -8,16 +8,16 @@ import csv
 import argparse
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("--base_path", type=str, default='/local/slurm-5646003/local/audio', help="the root path of audio data")
+parser.add_argument("--slurm-id", type=str, default='5689254', help="the root path of audio data")
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    base_path = args.base_path
+    base_path = '/local/slurm-' + args.slurm_id + '/local/audio'
     list_path = "/jet/home/billyli/data_folder/DayLongAudio/lists/"
 
     # fix bug: generate an empty directory to save json files
-    if os.path.exists('./data/datafiles') == False:
-        os.mkdir('./data/datafiles')
+    if os.path.exists(base_path + '/data/datafiles') == False:
+        os.mkdir(base_path + '/data/datafiles')
 
     bal_train_wav_list = []
     unbal_train_wav_list = []
@@ -45,7 +45,7 @@ if __name__ == '__main__':
                     missing_count+=1
     #                 print("missing training: " + row[0])
     print(f'unbalanced count: {unbal_count}, missing count: {missing_count}')
-    with open('./data/datafiles/audioset_unbal_train_data' +'.json', 'w') as f:
+    with open(base_path + '/data/datafiles/audioset_unbal_train_data' +'.json', 'w') as f:
         json.dump({'data': unbal_train_wav_list}, f, indent=1)
 
     with open(os.path.join(list_path, 'balanced_train_segments.csv')) as bal_csv_file:
@@ -70,10 +70,10 @@ if __name__ == '__main__':
                     missing_count+=1
     #                 print("missing training: " + row[0])
     print(f'balanced count: {bal_count}, missing count: {missing_count}')
-    with open('./data/datafiles/audioset_bal_train_data' +'.json', 'w') as f:
+    with open(base_path + '/data/datafiles/audioset_bal_train_data' +'.json', 'w') as f:
         json.dump({'data': bal_train_wav_list}, f, indent=1)
 
-    with open('./data/datafiles/audioset_bal_unbal_train_data' +'.json', 'w') as f:
+    with open(base_path + '/data/datafiles/audioset_bal_unbal_train_data' +'.json', 'w') as f:
         json.dump({'data': bal_unbal_train_wav_list}, f, indent=1)
 
     with open(os.path.join(list_path, 'eval_segments.csv')) as eval_csv_file:
@@ -97,7 +97,7 @@ if __name__ == '__main__':
                     missing_count+=1
     #                 print("missing training: " + row[0])
     print(f'eval count: {eval_count}, missing count: {missing_count}')
-    with open('./data/datafiles/audioset_eval_data' +'.json', 'w') as f:
+    with open(base_path + '/data/datafiles/audioset_eval_data' +'.json', 'w') as f:
         json.dump({'data': eval_wav_list}, f, indent=1)
 
 

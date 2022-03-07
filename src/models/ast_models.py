@@ -75,6 +75,7 @@ class ASTModel(nn.Module):
             # automatcially get the intermediate shape
             f_dim, t_dim = self.get_shape(fstride, tstride, input_fdim, input_tdim)
             num_patches = f_dim * t_dim
+            print(f'f_dim: {f_dim},t_dim: {t_dim}, num_patches: {num_patches}')
             self.v.patch_embed.num_patches = num_patches
             if verbose == True:
                 print('frequncey stride={:d}, time stride={:d}'.format(fstride, tstride))
@@ -105,6 +106,7 @@ class ASTModel(nn.Module):
                 new_pos_embed = new_pos_embed.reshape(1, self.original_embedding_dim, num_patches).transpose(1,2)
                 # concatenate the above positional embedding with the cls token and distillation token of the deit model.
                 self.v.pos_embed = nn.Parameter(torch.cat([self.v.pos_embed[:, :2, :].detach(), new_pos_embed], dim=1))
+                print(f'pos_embedding reshaped shape: {self.v.pos_embed.shape}')
             else:
                 # if not use imagenet pretrained model, just randomly initialize a learnable positional embedding
                 # TODO can use sinusoidal positional embedding instead
@@ -126,7 +128,7 @@ class ASTModel(nn.Module):
 #                 audioset_mdl_url = 'https://www.dropbox.com/s/cv4knew8mvbrnvq/audioset_0.4593.pth?dl=1'
 #                 wget.download(audioset_mdl_url, out='../../pretrained_models/audioset_10_10_0.4593.pth')
             print('I got here!')
-            sd = torch.load('/ocean/projects/iri120008p/billyli/ast/pretrained_models/audioset_10_10_0.4593.pth', map_location=device)
+            sd = torch.load('../pretrained_models/audioset_10_10_0.4593.pth', map_location=device)
             audio_model = ASTModel(label_dim=527, fstride=10, tstride=10, input_fdim=128, input_tdim=1024, imagenet_pretrain=False, audioset_pretrain=False, model_size='base384', verbose=False)
             audio_model = torch.nn.DataParallel(audio_model)
             audio_model.load_state_dict(sd, strict=False)
@@ -153,8 +155,10 @@ class ASTModel(nn.Module):
 
     def get_shape(self, fstride, tstride, input_fdim=128, input_tdim=1024):
         test_input = torch.randn(1, 1, input_fdim, input_tdim)
+        print(f'input_fdim: {input_fdim},input_tdim: {input_tdim}')
         test_proj = nn.Conv2d(1, self.original_embedding_dim, kernel_size=(16, 16), stride=(fstride, tstride))
         test_out = test_proj(test_input)
+        print(f'out_shape: {test_out.shape}')
         f_dim = test_out.shape[2]
         t_dim = test_out.shape[3]
         return f_dim, t_dim

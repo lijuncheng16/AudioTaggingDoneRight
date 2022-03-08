@@ -125,10 +125,14 @@ class AudiosetDataset(Dataset):
 
             mix_waveform = mix_lambda * waveform1 + (1 - mix_lambda) * waveform2
             waveform = mix_waveform - mix_waveform.mean()
-
-        fbank = torchaudio.compliance.kaldi.fbank(waveform, htk_compat=True, sample_frequency=sr, use_energy=False,
+        if self.melbins > 100:
+            fbank = torchaudio.compliance.kaldi.fbank(waveform, htk_compat=True, sample_frequency=sr, use_energy=False,
                                                   window_type='hanning', num_mel_bins=self.melbins, dither=0.0, frame_shift=10)
-
+        else:
+            melspec = torchaudio.transforms.MelSpectrogram(sample_rate=sr, n_fft=4096, win_length=1024, hop_length=400, center=True, pad_mode="constant", power=2, norm='slaney', onesided=True, n_mels=self.melbins, mel_scale="slaney")
+            spec = melspec(waveform).squeeze()
+            a2db = torchaudio.transforms.AmplitudeToDB(spec)
+            fbank = a2db(spec)
         target_length = self.audio_conf.get('target_length')
         n_frames = fbank.shape[0]
 

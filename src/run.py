@@ -29,7 +29,8 @@ parser.add_argument("--data-eval", type=str, default='', help="evaluation data j
 parser.add_argument("--label-csv", type=str, default='', help="csv with class labels")
 parser.add_argument("--n_class", type=int, default=527, help="number of classes")
 parser.add_argument("--model", type=str, default='ast', help="the model used")
-parser.add_argument("--dataset", type=str, default="audioset", help="the dataset used", choices=["audioset", "esc50", "speechcommands"])
+parser.add_argument("--dataset", type=str, default="audioset", help="the dataset used", choices=["audioset","audioset_s", "esc50", "speechcommands"])
+parser.add_argument("--n_mels", type=int, default=128, help="number of mel bins")
 
 parser.add_argument("--exp-dir", type=str, default="", help="directory to dump experiments")
 parser.add_argument('--lr', '--learning-rate', default=0.001, type=float, metavar='LR', help='initial learning rate')
@@ -58,12 +59,12 @@ args = parser.parse_args()
 
 print('now train a audio spectrogram transformer model')
 # dataset spectrogram mean and std, used to normalize the input
-norm_stats = {'audioset':[-4.2677393, 4.5689974], 'esc50':[-6.6268077, 5.358466], 'speechcommands':[-6.845978, 5.5654526]}
-target_length = {'audioset':1024, 'esc50':512, 'speechcommands':128}
+norm_stats = {'audioset':[-4.2677393, 4.5689974], 'audioset_s':[-12.75089158, 11.75840071], 'esc50':[-6.6268077, 5.358466], 'speechcommands':[-6.845978, 5.5654526]}
+target_length = {'audioset':1024, 'audioset_s':400, 'esc50':512, 'speechcommands':128}
 # if add noise for data augmentation, only use for speech commands
-noise = {'audioset': False, 'esc50': False, 'speechcommands':True}
+noise = {'audioset': False, 'audioset_s': False, 'esc50': False, 'speechcommands':True}
 
-audio_conf = {'num_mel_bins': 128, 'target_length': target_length[args.dataset], 'freqm': args.freqm, 'timem': args.timem, 'mixup': args.mixup, 'dataset': args.dataset, 'mode':'train', 'mean':norm_stats[args.dataset][0], 'std':norm_stats[args.dataset][1],
+audio_conf = {'num_mel_bins': args.n_mels, 'target_length': target_length[args.dataset], 'freqm': args.freqm, 'timem': args.timem, 'mixup': args.mixup, 'dataset': args.dataset, 'mode':'train', 'mean':norm_stats[args.dataset][0], 'std':norm_stats[args.dataset][1],
               'noise':noise[args.dataset]}
 val_audio_conf = {'num_mel_bins': 128, 'target_length': target_length[args.dataset], 'freqm': 0, 'timem': 0, 'mixup': 0, 'dataset': args.dataset, 'mode':'evaluation', 'mean':norm_stats[args.dataset][0], 'std':norm_stats[args.dataset][1], 'noise':False}
 

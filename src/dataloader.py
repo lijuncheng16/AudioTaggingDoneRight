@@ -133,6 +133,7 @@ class AudiosetDataset(Dataset):
             spec = melspec(waveform).squeeze()
             a2db = torchaudio.transforms.AmplitudeToDB(spec)
             fbank = a2db(spec)
+            fbank = fbank.transpose(0,1)
         target_length = self.audio_conf.get('target_length')
         n_frames = fbank.shape[0]
 

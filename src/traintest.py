@@ -56,7 +56,7 @@ def train(audio_model, train_loader, test_loader, args):
     if args.dataset == 'audioset' or args.dataset == 'audioset_s':
         if len(train_loader.dataset) > 2e5:
             print('scheduler for full audioset is used')
-            scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [2,3,4,5], gamma=0.5, last_epoch=-1)
+            scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [2,3,4,5,6,7,8,9,10], gamma=0.5, last_epoch=-1)
         else:
             print('scheduler for balanced audioset is used')
             scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [10, 15, 20, 25], gamma=0.5, last_epoch=-1)

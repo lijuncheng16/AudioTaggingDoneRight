@@ -30,6 +30,8 @@ parser.add_argument("--n_class", type=int, default=527, help="number of classes"
 parser.add_argument("--model", type=str, default='ast', help="the model used")
 parser.add_argument("--dataset", type=str, default="audioset", help="the dataset used", choices=["audioset","audioset_s", "esc50", "speechcommands"])
 parser.add_argument("--n_mels", type=int, default=128, help="number of mel bins")
+parser.add_argument('--mean', default=-12.7508, type=float, help='normalizing mean')
+parser.add_argument('--std', default=11.7584, type=float, help='normalizing std')
 
 parser.add_argument("--exp-dir", type=str, default="", help="directory to dump experiments")
 parser.add_argument('--lr', '--learning-rate', default=0.001, type=float, metavar='LR', help='initial learning rate')
@@ -57,8 +59,8 @@ args = parser.parse_args()
 
 
 print('now train a audio spectrogram transformer model')
-# dataset spectrogram mean and std, used to normalize the input
-norm_stats = {'audioset':[-4.2677393, 4.5689974], 'audioset_s':[-12.75089158, 11.75840071], 'esc50':[-6.6268077, 5.358466], 'speechcommands':[-6.845978, 5.5654526]}
+# dataset spectrogram mean and std, used to normalize the input #-12.75089158, 11.75840071
+norm_stats = {'audioset':[-4.2677393, 4.5689974], 'audioset_s':[args.mean, args.std], 'esc50':[-6.6268077, 5.358466], 'speechcommands':[-6.845978, 5.5654526]}
 target_length = {'audioset':1024, 'audioset_s':400, 'esc50':512, 'speechcommands':128}
 # if add noise for data augmentation, only use for speech commands
 noise = {'audioset': False, 'audioset_s': False, 'esc50': False, 'speechcommands':True}

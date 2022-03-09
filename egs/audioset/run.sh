@@ -32,9 +32,12 @@ mixup=0.5
 # corresponding to overlap of 6 for 16*16 patches
 fstride=10
 tstride=10
-batch_size=448
-exp_dir=./exp/${dataset}-${set}-f$fstride-t$tstride-p$imagenetpretrain-b$batch_size-lr${lr}-ast_debug
-expid=${model}-${set}-f${fstride}-t${tstride}-pre${imagenetpretrain}-b${batch_size}-lr${lr}-mix${mixup}-freqm${freqm}-timem${timem}
+batch_size=224
+mean=-22.5
+std=37.5
+suffix=ast_debug
+exp_dir=./exp/${dataset}-${set}-f$fstride-t$tstride-p$imagenetpretrain-b$batch_size-lr${lr}-m${mean}-std${std}-${suffix}
+expid=${model}-${set}-f${fstride}-t${tstride}-pre${imagenetpretrain}-b${batch_size}-lr${lr}-mix${mixup}-freqm${freqm}-timem${timem}-m${mean}-std${std}
 logger=${exp_dir}/${expid}.txt
 if [ -d $exp_dir ]; then
   echo 'exp exist'
@@ -43,13 +46,13 @@ fi
 mkdir -p $exp_dir
 echo ${model}
 echo "CUDA_CACHE_DISABLE=1 python -W ignore ../../src/run.py --model ${model} --dataset ${dataset} --n_mels ${n_mels}\
---data-train ${tr_data} --data-val ${te_data} --exp-dir $exp_dir \
+--data-train ${tr_data} --data-val ${te_data} --exp-dir $exp_dir --mean ${mean} --std ${std} \
 --label-csv ./data/class_labels_indices.csv --n_class 527 \
 --lr $lr --n-epochs ${epoch} --batch-size $batch_size --save_model True \
 --freqm $freqm --timem $timem --mixup ${mixup} --bal ${bal} \
 --tstride $tstride --fstride $fstride --imagenet_pretrain $imagenetpretrain" >> $logger
 CUDA_CACHE_DISABLE=1 python -W ignore ../../src/run.py --model ${model} --dataset ${dataset} --n_mels ${n_mels} \
---data-train ${tr_data} --data-val ${te_data} --exp-dir $exp_dir \
+--data-train ${tr_data} --data-val ${te_data} --exp-dir $exp_dir --mean ${mean} --std ${std} \
 --label-csv ./data/class_labels_indices.csv --n_class 527 \
 --lr $lr --n-epochs ${epoch} --batch-size $batch_size --save_model True \
 --freqm $freqm --timem $timem --mixup ${mixup} --bal ${bal} \

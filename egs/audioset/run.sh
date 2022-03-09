@@ -32,7 +32,7 @@ mixup=0.5
 # corresponding to overlap of 6 for 16*16 patches
 fstride=10
 tstride=10
-batch_size=768
+batch_size=448
 exp_dir=./exp/${dataset}-${set}-f$fstride-t$tstride-p$imagenetpretrain-b$batch_size-lr${lr}-ast_debug
 expid=${model}-${set}-f${fstride}-t${tstride}-pre${imagenetpretrain}-b${batch_size}-lr${lr}-mix${mixup}-freqm${freqm}-timem${timem}
 logger=${exp_dir}/${expid}.txt

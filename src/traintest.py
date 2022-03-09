@@ -54,7 +54,7 @@ def train(audio_model, train_loader, test_loader, args):
 
     # dataset specific settings
     #scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=args.lr_patience, verbose=True)
-    if args.dataset == 'audioset':
+    if args.dataset == 'audioset' or args.dataset == 'audioset_s':
         if len(train_loader.dataset) > 2e5:
             print('scheduler for full audioset is used')
             scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [2,3,4,5], gamma=0.5, last_epoch=-1)
@@ -235,7 +235,7 @@ def train(audio_model, train_loader, test_loader, args):
         loss_meter.reset()
         per_sample_dnn_time.reset()
 
-    if args.dataset == 'audioset':
+    if args.dataset == 'audioset' or args.dataset == 'audioset_s':
         if len(train_loader.dataset) > 2e5:
             stats=validate_wa(audio_model, test_loader, args, 1, 5)
         else:

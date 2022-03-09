@@ -25,14 +25,14 @@ else
   tr_data=${slurm_folder}/audioset_bal_unbal_train_data.json
 fi
 te_data=${slurm_folder}/audioset_eval_data.json
-freqm=48
+freqm=24
 n_mels=64
-timem=192
+timem=75
 mixup=0.5
 # corresponding to overlap of 6 for 16*16 patches
 fstride=10
 tstride=10
-batch_size=48
+batch_size=768
 exp_dir=./exp/${dataset}-${set}-f$fstride-t$tstride-p$imagenetpretrain-b$batch_size-lr${lr}-ast_debug
 expid=${model}-${set}-f${fstride}-t${tstride}-pre${imagenetpretrain}-b${batch_size}-lr${lr}-mix${mixup}-freqm${freqm}-timem${timem}
 logger=${exp_dir}/${expid}.txt

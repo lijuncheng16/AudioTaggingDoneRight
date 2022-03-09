@@ -87,7 +87,7 @@ val_loader = torch.utils.data.DataLoader(
     batch_size=args.batch_size*2, shuffle=False, num_workers=args.num_workers, pin_memory=True)
 # transformer based model
 if args.model == 'ast':
-    audio_model = models.ASTModel(label_dim=args.n_class, fstride=args.fstride, tstride=args.tstride, input_fdim=128,
+    audio_model = models.ASTModel(label_dim=args.n_class, fstride=args.fstride, tstride=args.tstride, input_fdim=args.n_mels,
                                   input_tdim=target_length[args.dataset], imagenet_pretrain=args.imagenet_pretrain,
                                   audioset_pretrain=args.audioset_pretrain, model_size='base384')
 elif args.model == 'fnet':

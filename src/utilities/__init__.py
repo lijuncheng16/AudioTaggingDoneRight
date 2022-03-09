@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time    : 6/19/21 4:39 PM
-# @Author  : Yuan Gong
-# @Affiliation  : Massachusetts Institute of Technology
-# @Email   : yuangong@mit.edu
+# @Time    : 3/8/22 
+# @Modified by : Juncheng B Li
+# @Original Author  : Yuan Gong
 # @File    : __init__.py
 
 from .util import *

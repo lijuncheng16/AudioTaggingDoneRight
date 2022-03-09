@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-# @Author   : jeffcheng
-# @Time     : 2021/9/1 - 15:13
+# @Time    : 3/8/22 
+# @Modified by : Juncheng B Li
+# @Original Author  : jeffcheng
+
 # @Reference: a inference script for single audio, heavily base on demo.py and traintest.py
 import os
 import sys

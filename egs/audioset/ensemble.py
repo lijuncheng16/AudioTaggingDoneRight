@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time    : 6/23/21 5:38 PM
-# @Author  : Yuan Gong
-# @Affiliation  : Massachusetts Institute of Technology
-# @Email   : yuangong@mit.edu
+# @Time    : 3/8/22 
+# @Modified by : Juncheng B Li
+# @Original Author  : Yuan Gong
 # @File    : ensemble.py
 
 # get the ensemble result

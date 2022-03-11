@@ -59,8 +59,8 @@ args = parser.parse_args()
 
 
 print('now train a audio spectrogram transformer model')
-# dataset spectrogram mean and std, used to normalize the input #-12.75089158, 11.75840071
-norm_stats = {'audioset':[-4.2677393, 4.5689974], 'audioset_s':[args.mean, args.std], 'esc50':[-6.6268077, 5.358466], 'speechcommands':[-6.845978, 5.5654526]}
+# dataset spectrogram mean and std, used to normalize the input audioset_s yun feature:#-12.75089158, 11.75840071 gong yuan audioset: -4.2677393, 4.5689974
+norm_stats = {'audioset':[args.mean, args.std], 'audioset_s':[args.mean, args.std], 'esc50':[-6.6268077, 5.358466], 'speechcommands':[-6.845978, 5.5654526]}
 target_length = {'audioset':1024, 'audioset_s':400, 'esc50':512, 'speechcommands':128}
 # if add noise for data augmentation, only use for speech commands
 noise = {'audioset': False, 'audioset_s': False, 'esc50': False, 'speechcommands':True}

@@ -36,7 +36,7 @@ class ResNetAttention(nn.Module):
 
         batch_size = x.shape[0]
         x = self.model(x)
-        x = x.reshape([batch_size, 2048, 4, 33])
+        x = x.reshape([batch_size, 2048, 4, 32])
         x = self.avgpool(x)
         x = x.transpose(2,3)
         out, norm_att = self.attention(x)

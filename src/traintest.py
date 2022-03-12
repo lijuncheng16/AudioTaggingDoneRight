@@ -280,7 +280,8 @@ def validate(audio_model, val_loader, args, epoch):
 
             # compute output
             audio_output = audio_model(audio_input)
-            audio_output = torch.sigmoid(audio_output)
+            if args.model == 'ast':
+                audio_output = torch.sigmoid(audio_output)
             predictions = audio_output.to('cpu').detach()
 
             A_predictions.append(predictions)
@@ -288,6 +289,8 @@ def validate(audio_model, val_loader, args, epoch):
 
             # compute the loss
             labels = labels.to(device)
+            epsilon = 1e-7
+            audio_output = torch.clamp(audio_output, epsilon, 1. - epsilon)
             if isinstance(args.loss_fn, torch.nn.CrossEntropyLoss):
                 loss = args.loss_fn(audio_output, torch.argmax(labels.long(), axis=1))
             else:

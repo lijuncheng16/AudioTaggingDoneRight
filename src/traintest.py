@@ -115,12 +115,12 @@ def train(audio_model, train_loader, test_loader, args):
                     param_group['lr'] = warm_lr
                 print('warm-up learning rate is {:f}'.format(optimizer.param_groups[0]['lr']))
 
-            with autocast():
-                audio_output = audio_model(audio_input)
-                if isinstance(loss_fn, torch.nn.CrossEntropyLoss):
-                    loss = loss_fn(audio_output, torch.argmax(labels.long(), axis=1))
-                else:
-                    loss = loss_fn(audio_output, labels)
+#             with autocast():
+            audio_output = audio_model(audio_input)
+            if isinstance(loss_fn, torch.nn.CrossEntropyLoss):
+                loss = loss_fn(audio_output, torch.argmax(labels.long(), axis=1))
+            else:
+                loss = loss_fn(audio_output, labels)
 
             # optimization if amp is not used
             # optimizer.zero_grad()

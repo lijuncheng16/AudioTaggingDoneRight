@@ -20,7 +20,7 @@ then
   tr_data=${slurm_folder}/audioset_bal_train_data.json
 else
   bal=bal
-  lr=4e-4
+  lr=1e-3
   epoch=10
   tr_data=${slurm_folder}/audioset_bal_unbal_train_data.json
 fi
@@ -40,11 +40,11 @@ pooling=att
 addpos=True
 transformer_dropout=0.75
 
-batch_size=200
+batch_size=512
 mean=-29.686901
 std=40.898224
 suffix=new_model_dev
-exp_dir=./exp/${model}-${dataset}-${set}-p$imagenetpretrain-b$batch_size-lr${lr}-fm${freqm}-tm${timem}-mix${mixup}-m${mean}-std${std}-epoch${epoch}-conv${n_conv_layers}-pool${n_pooling_layers}-${suffix}
+exp_dir=./exp/${model}-${dataset}-${set}-p$imagenetpretrain-b$batch_size-lr${lr}-fm${freqm}-tm${timem}-mix${mixup}-m${mean}-std${std}-epoch${epoch}-conv${n_conv_layers}-pool${n_pool_layers}-${suffix}
 expid=${model}-${set}-pre${imagenetpretrain}-b${batch_size}-lr${lr}-mix${mixup}-freqm${freqm}-timem${timem}-m${mean}-std${std}
 logger=${exp_dir}/${expid}.txt
 if [ -d $exp_dir ]; then

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-# @Time    : 6/19/21 4:31 PM
-# @Author  : Yuan Gong
-# @Affiliation  : Massachusetts Institute of Technology
-# @Email   : yuangong@mit.edu
+# @Time    : 3/12/2022 9:12am
+# @Modified by: Juncheng B Li
+# @Originally from AST pipeline
 # @File    : __init__.py
 
 from .ast_models import *
 from .AudioFnet import get_fnet
+from .Net_mModal_mgpu import *

@@ -35,6 +35,8 @@ parser.add_argument('--std', default=11.7584, type=float, help='normalizing std'
 
 parser.add_argument("--exp-dir", type=str, default="", help="directory to dump experiments")
 parser.add_argument('--lr', '--learning-rate', default=0.001, type=float, metavar='LR', help='initial learning rate')
+parser.add_argument('--beta1', type = float, default = 0.9)
+parser.add_argument('--beta2', type = float, default = 0.999)
 parser.add_argument("--optim", type=str, default="adam", help="training optimizer", choices=["sgd", "adam"])
 parser.add_argument('-b', '--batch-size', default=12, type=int, metavar='N', help='mini-batch size')
 parser.add_argument('-w', '--num-workers', default=32, type=int, metavar='NW', help='# of workers for dataloading (default: 32)')
@@ -54,6 +56,22 @@ parser.add_argument("--fstride", type=int, default=10, help="soft split freq str
 parser.add_argument("--tstride", type=int, default=10, help="soft split time stride, overlap=patch_size-stride")
 parser.add_argument('--imagenet_pretrain', help='if use ImageNet pretrained audio spectrogram transformer model', type=ast.literal_eval, default='True')
 parser.add_argument('--audioset_pretrain', help='if use ImageNet and audioset pretrained audio spectrogram transformer model', type=ast.literal_eval, default='False')
+
+# arguments for TAL-trans Models:
+parser.add_argument('--embedding_size', type = int, default = 1024) # this is the embedding size after a pooling layer
+                                                                    # after a non-pooling layer, the embeddings size will be twice this much
+parser.add_argument('--n_conv_layers', type = int, default = 10)
+parser.add_argument('--n_trans_layers', type = int, default = 2)
+parser.add_argument('--kernel_size', type = str, default = '3')     # 'n' or 'nxm'
+parser.add_argument('--n_pool_layers', type = int, default = 5)     # the pooling layers will be inserted uniformly into the conv layers
+                                                                    # the should be at least 2 and at most 6 pooling layers
+                                                                    # the first two pooling layers will have stride (2,2); later ones will have stride (1,2)
+parser.add_argument('--batch_norm', type = bool, default = True)
+parser.add_argument('--dropout', type = float, default = 0.0)
+parser.add_argument('--pooling', type = str, default = 'lin', choices = ['max', 'ave', 'lin', 'exp', 'att', 'h-att', 'all'])
+parser.add_argument('--continue_from_ckpt', type = str, default = None)
+parser.add_argument('--addpos', type = bool, default = False)
+parser.add_argument('--transformer_dropout', type = float, default = 0.5)
 
 args = parser.parse_args()
 
@@ -93,6 +111,12 @@ if args.model == 'ast':
                                   audioset_pretrain=args.audioset_pretrain, model_size='base384')
 elif args.model == 'fnet':
     audio_model = models.get_fnet()
+elif args.model == 'TALtrans':
+    if 'x' not in args.kernel_size:
+        args.kernel_size = args.kernel_size + 'x' + args.kernel_size
+    args.kernel_size = tuple(int(x) for x in args.kernel_size.split('x'))
+
+    audio_model = models.TransformerEncoder(args)
 
 print("\nCreating experiment directory: %s" % args.exp_dir)
 os.makedirs("%s/models" % args.exp_dir)

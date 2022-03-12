@@ -7,3 +7,5 @@
 from .ast_models import *
 from .AudioFnet import get_fnet
 from .Net_mModal_mgpu import *
+from .HigherModels import *
+from .pslaModels import *

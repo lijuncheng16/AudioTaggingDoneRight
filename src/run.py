@@ -72,6 +72,9 @@ parser.add_argument('--pooling', type = str, default = 'lin', choices = ['max', 
 parser.add_argument('--continue_from_ckpt', type = str, default = None)
 parser.add_argument('--addpos', type = bool, default = False)
 parser.add_argument('--transformer_dropout', type = float, default = 0.5)
+#psla model
+parser.add_argument("--eff_b", type=int, default=0, help="which efficientnet to use, the larger number, the more complex")
+parser.add_argument("--att_head", type=int, default=4, help="number of attention heads")
 
 args = parser.parse_args()
 
@@ -115,9 +118,13 @@ elif args.model == 'TALtrans':
     if 'x' not in args.kernel_size:
         args.kernel_size = args.kernel_size + 'x' + args.kernel_size
     args.kernel_size = tuple(int(x) for x in args.kernel_size.split('x'))
-
     audio_model = models.TransformerEncoder(args)
-
+elif args.model == 'efficientnet':
+    audio_model = models.EffNetAttention(label_dim=args.n_class, b=args.eff_b, pretrain=args.impretrain, head_num=args.att_head)
+elif args.model == 'resnet':
+    audio_model = models.ResNetAttention(label_dim=args.n_class, pretrain=args.impretrain)
+elif args.model == 'mbnet':
+    audio_model = models.MBNet(label_dim=args.n_class, pretrain=args.effpretrain)
 print("\nCreating experiment directory: %s" % args.exp_dir)
 os.makedirs("%s/models" % args.exp_dir)
 with open("%s/args.pkl" % args.exp_dir, "wb") as f:

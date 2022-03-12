@@ -520,16 +520,20 @@ class TransformerEncoder(nn.Module):
         frame_prob = torch.clamp(frame_prob, 1e-7, 1 - 1e-7)
         if self.pooling == 'max':
             global_prob, _ = frame_prob.max(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'ave':
             global_prob = frame_prob.mean(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'lin':
             global_prob = (frame_prob * frame_prob).sum(dim = 1) / frame_prob.sum(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'exp':
             global_prob = (frame_prob * frame_prob.exp()).sum(dim = 1) / frame_prob.exp().sum(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'att':
             frame_att = F.softmax(self.fc_att(x_hat), dim = 1)
             global_prob = (frame_prob * frame_att).sum(dim = 1)

@@ -37,7 +37,7 @@ class TALNet(nn.Module):
         self.__dict__.update(args.__dict__)     # Instill all args into self
 #         print(self.n_conv_layers)
         assert self.n_conv_layers % self.n_pool_layers == 0
-        self.input_n_freq_bins = n_freq_bins = 64
+        self.input_n_freq_bins = n_freq_bins = args.n_mels
         self.output_size = 527
         self.conv = nn.ModuleList()
 #         self.conv = []
@@ -292,7 +292,7 @@ class NewNet(nn.Module):
         super(NewNet, self).__init__()
         self.__dict__.update(args.__dict__)     # Instill all args into self
         assert self.n_conv_layers % self.n_pool_layers == 0
-        self.input_n_freq_bins = n_freq_bins = 64
+        self.input_n_freq_bins = n_freq_bins = args.n_mels
         self.output_size = 527
 #         self.conv = []
         self.conv = nn.ModuleList()
@@ -452,7 +452,7 @@ class TransformerEncoder(nn.Module):
         super(TransformerEncoder, self).__init__()
         self.__dict__.update(args.__dict__) 
         assert self.n_conv_layers % self.n_pool_layers == 0
-        self.input_n_freq_bins = n_freq_bins = 64
+        self.input_n_freq_bins = n_freq_bins = args.n_mels
         self.output_size = 527
 #         self.conv = []
         self.conv = nn.ModuleList()
@@ -474,7 +474,7 @@ class TransformerEncoder(nn.Module):
         #self.linear_in = nn.Linear(self.input_n_freq_bins, self.embedding_size)
         #self.layer_norm_in = nn.LayerNorm(self.embedding_size)
         if self.addpos:
-            self.positional_encoding = PositionalEncoding(64, max_len=400)
+            self.positional_encoding = PositionalEncoding(args.n_mels, max_len=args.target_length)
         self.enc_layer = EncoderLayer(self.embedding_size, self.embedding_size, dropout=self.transformer_dropout)
         # self.layer_stack = nn.ModuleList([
         #     EncoderLayer(self.embedding_size, self.embedding_size, dropout=self.transformer_dropout)
@@ -569,7 +569,7 @@ class Transformer(nn.Module):
     def __init__(self, args):
         super(Transformer, self).__init__()
         self.__dict__.update(args.__dict__) 
-        self.input_n_freq_bins = n_freq_bins = 64
+        self.input_n_freq_bins = n_freq_bins = args.n_mels
         self.output_size = 527
         
         # use linear transformation with layer norm to replace input embedding
@@ -652,7 +652,7 @@ class MMTEncoder(nn.Module):
         self.__dict__.update(args.__dict__) 
         assert self.n_conv_layers % self.n_pool_layers == 0
         #self.fusion_module = fusion_module
-        self.input_n_freq_bins = n_freq_bins = 64
+        self.input_n_freq_bins = n_freq_bins = args.n_mels
         self.output_size = 527
         self.conv = nn.ModuleList()
         pool_interval = int(self.n_conv_layers / self.n_pool_layers)
@@ -673,7 +673,7 @@ class MMTEncoder(nn.Module):
         #self.linear_in = nn.Linear(self.input_n_freq_bins, self.embedding_size)
         #self.layer_norm_in = nn.LayerNorm(self.embedding_size)
         if self.addpos:
-            self.positional_encoding = PositionalEncoding(64, max_len=400)
+            self.positional_encoding = PositionalEncoding(args.n_mels, max_len=args.target_length)
 #         self.enc_layer = EncoderLayer(self.embedding_size, self.embedding_size, dropout=self.transformer_dropout)
         if self.fusion_module == 0:
             self.proj0 = nn.Linear(9216, self.embedding_size)

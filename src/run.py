@@ -118,6 +118,7 @@ elif args.model == 'TALtrans':
     if 'x' not in args.kernel_size:
         args.kernel_size = args.kernel_size + 'x' + args.kernel_size
     args.kernel_size = tuple(int(x) for x in args.kernel_size.split('x'))
+    args.target_length = target_length[args.dataset]
     audio_model = models.TransformerEncoder(args)
 elif args.model == 'efficientnet':
     audio_model = models.EffNetAttention(label_dim=args.n_class, b=args.eff_b, pretrain=args.imagenet_pretrain, head_num=args.att_head)

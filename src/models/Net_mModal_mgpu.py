@@ -61,13 +61,13 @@ class TALNet(nn.Module):
         if self.pooling == 'att':
             self.fc_att = nn.Linear(self.embedding_size, self.output_size)
         # Better initialization
-        nn.init.orthogonal(self.gru.weight_ih_l0); nn.init.constant(self.gru.bias_ih_l0, 0)
-        nn.init.orthogonal(self.gru.weight_hh_l0); nn.init.constant(self.gru.bias_hh_l0, 0)
-        nn.init.orthogonal(self.gru.weight_ih_l0_reverse); nn.init.constant(self.gru.bias_ih_l0_reverse, 0)
-        nn.init.orthogonal(self.gru.weight_hh_l0_reverse); nn.init.constant(self.gru.bias_hh_l0_reverse, 0)
-        nn.init.xavier_uniform(self.fc_prob.weight); nn.init.constant(self.fc_prob.bias, 0)
+        nn.init.orthogonal_(self.gru.weight_ih_l0); nn.init.constant_(self.gru.bias_ih_l0, 0)
+        nn.init.orthogonal_(self.gru.weight_hh_l0); nn.init.constant_(self.gru.bias_hh_l0, 0)
+        nn.init.orthogonal_(self.gru.weight_ih_l0_reverse); nn.init.constant_(self.gru.bias_ih_l0_reverse, 0)
+        nn.init.orthogonal_(self.gru.weight_hh_l0_reverse); nn.init.constant_(self.gru.bias_hh_l0_reverse, 0)
+        nn.init.xavier_uniform_(self.fc_prob.weight); nn.init.constant_(self.fc_prob.bias, 0)
         if self.pooling == 'att':
-            nn.init.xavier_uniform(self.fc_att.weight); nn.init.constant(self.fc_att.bias, 0)
+            nn.init.xavier_uniform_(self.fc_att.weight); nn.init.constant_(self.fc_att.bias, 0)
 
     def forward(self, x):
         #print('x shape:', x.shape)
@@ -87,20 +87,25 @@ class TALNet(nn.Module):
         frame_prob = torch.clamp(frame_prob, 1e-7, 1 - 1e-7)
         if self.pooling == 'max':
             global_prob, _ = frame_prob.max(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'ave':
             global_prob = frame_prob.mean(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'lin':
             global_prob = (frame_prob * frame_prob).sum(dim = 1) / frame_prob.sum(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'exp':
             global_prob = (frame_prob * frame_prob.exp()).sum(dim = 1) / frame_prob.exp().sum(dim = 1)
-            return global_prob, frame_prob
+#             return global_prob, frame_prob
+            return global_prob
         elif self.pooling == 'att':
             frame_att = F.softmax(self.fc_att(x), dim = 1)
             global_prob = (frame_prob * frame_att).sum(dim = 1)
-            return global_prob, frame_prob, frame_att
+#             return global_prob, frame_prob, frame_att
+            return global_prob
 
     def predict(self, x, verbose = True, batch_size = 100):
         # Predict in batches. Both input and output are numpy arrays.

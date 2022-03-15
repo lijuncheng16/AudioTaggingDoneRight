@@ -107,6 +107,9 @@ else:
 val_loader = torch.utils.data.DataLoader(
     dataloader.AudiosetDataset(args.data_val, label_csv=args.label_csv, audio_conf=val_audio_conf),
     batch_size=args.batch_size*2, shuffle=False, num_workers=args.num_workers, pin_memory=True)
+if 'x' not in args.kernel_size:
+    args.kernel_size = args.kernel_size + 'x' + args.kernel_size
+args.kernel_size = tuple(int(x) for x in args.kernel_size.split('x'))
 # transformer based model
 if args.model == 'ast':
     audio_model = models.ASTModel(label_dim=args.n_class, fstride=args.fstride, tstride=args.tstride, input_fdim=args.n_mels,
@@ -115,11 +118,10 @@ if args.model == 'ast':
 elif args.model == 'fnet':
     audio_model = models.get_fnet()
 elif args.model == 'TALtrans':
-    if 'x' not in args.kernel_size:
-        args.kernel_size = args.kernel_size + 'x' + args.kernel_size
-    args.kernel_size = tuple(int(x) for x in args.kernel_size.split('x'))
     args.target_length = target_length[args.dataset]
     audio_model = models.TransformerEncoder(args)
+elif args.model == 'TAL':
+    audio_model = models.TALNet(args)
 elif args.model == 'efficientnet':
     audio_model = models.EffNetAttention(label_dim=args.n_class, b=args.eff_b, pretrain=args.imagenet_pretrain, head_num=args.att_head)
 elif args.model == 'resnet':

@@ -9,3 +9,4 @@ from .AudioFnet import get_fnet
 from .Net_mModal_mgpu import *
 from .HigherModels import *
 from .pslaModels import *
+from .linearModels import *

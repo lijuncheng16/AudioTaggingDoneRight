@@ -8,7 +8,7 @@ class ResNetAttention(nn.Module):
     def __init__(self, label_dim=527, pretrain=True):
         super(ResNetAttention, self).__init__()
 
-        self.model = torchvision.models.resnet50(pretrained=False)
+        self.model = torchvision.models.resnet50(pretrained=pretrain)
 
         if pretrain == False:
             print('ResNet50 Model Trained from Scratch (ImageNet Pretraining NOT Used).')

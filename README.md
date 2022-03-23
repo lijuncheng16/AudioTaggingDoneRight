@@ -6,10 +6,8 @@
  - [AudioSet Recipe](#Audioset-Recipe)
  - [Contact](#Contact)
 
-
-## Getting Started  
-
-
+## This implementation's is based on AST https://github.com/YuanGongND/ast
+## Getting Started 
 
 **Parameters:**\
 `label_dim` : The number of classes (default:`527`).\
@@ -28,7 +26,7 @@
 Audioset is a little bit more complex, you will need to prepare your data json files (i.e., `train_data.json` and `eval_data.json`) by your self.
 The reason is that the raw wavefiles of Audioset is not released and you need to download them by yourself. We have put a sample json file in `ast/egs/audioset/data/datafiles`, please generate files in the same format (You can also refer to `ast/egs/esc50/prep_esc50.py` and `ast/egs/speechcommands/prep_sc.py`.). Please keep the label code consistent with `ast/egs/audioset/data/class_labels_indices.csv`.
 
-Once you have the json files, you will need to generate the sampling weight file of your training data (please check our [PSLA paper](https://arxiv.org/abs/2102.01243) to see why it is needed).
+Once you have the json files, you will need to generate the sampling weight file of your training data.
 ```
 cd ast/egs/audioset
 python gen_weight_file.py ./data/datafiles/train_data.json

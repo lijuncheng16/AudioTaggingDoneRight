@@ -1,14 +1,15 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from .HigherModels import *
-from efficientnet_pytorch import EfficientNet
+
 import torchvision
 
 class LinearModel(nn.Module):
     def __init__(self, n_layers=3, input_dim=64, hidden_dim=128, label_dim=527):
+        super(LinearModel, self).__init__()
         self.n_layers = n_layers
         self.hidden_dim = hidden_dim
+        self.label_dim = label_dim
         self.pooling = 'att'
         self.dropout = 0.1
         self.linear = nn.ModuleList()
@@ -23,14 +24,14 @@ class LinearModel(nn.Module):
             self.fc_att = nn.Linear(self.hidden_dim, self.label_dim)
 
     def forward(self, x):
-         for i in range(len(self.linear)):
+        for i in range(len(self.linear)):
             if self.dropout > 0: x = F.dropout(x, p = self.dropout, training = self.training)
-            x = self.linear[i](x)          
+            x = self.linear[i](x)
         frame_prob = torch.sigmoid(self.fc_prob(x))
         frame_prob = torch.clamp(frame_prob, 1e-7, 1 - 1e-7)
         frame_att = F.softmax(self.fc_att(x), dim = 1)
         global_prob = (frame_prob * frame_att).sum(dim = 1)
-#             return global_prob, frame_prob, frame_att
+#         return global_prob, frame_prob, frame_att
         return global_prob
     
     def predict(self, x, verbose = True, batch_size = 100):
@@ -160,12 +161,12 @@ class LinearModel(nn.Module):
 #         out, norm_att = self.attention(x)
 #         return out
 
-# if __name__ == '__main__':
-#     input_tdim = 1056
-#     #ast_mdl = ResNetNewFullAttention(pretrain=False)
-#     psla_mdl = EffNetFullAttention(pretrain=False, b=0, head_num=0)
-#     # input a batch of 10 spectrogram, each with 100 time frames and 128 frequency bins
-#     test_input = torch.rand([10, input_tdim, 128])
-#     test_output = psla_mdl(test_input)
-#     # output should be in shape [10, 527], i.e., 10 samples, each with prediction of 527 classes.
-#     print(test_output.shape)
+if __name__ == '__main__':
+    input_tdim = 1024
+    #ast_mdl = ResNetNewFullAttention(pretrain=False)
+    psla_mdl = LinearModel(input_dim=128)
+    # input a batch of 10 spectrogram, each with 100 time frames and 128 frequency bins
+    test_input = torch.rand([10, input_tdim, 128])
+    test_output = psla_mdl(test_input)
+    # output should be in shape [10, 527], i.e., 10 samples, each with prediction of 527 classes.
+    print(test_output.shape)

@@ -129,7 +129,7 @@ elif args.model == 'resnet':
 elif args.model == 'mbnet':
     audio_model = models.MBNet(label_dim=args.n_class, pretrain=args.imagenet_pretrain)
 elif args.model == 'linear':
-    audio_model = models.LinearModel(n_layers=3, input_dim=64, hidden_dim=128, label_dim=527)
+    audio_model = models.LinearModel(n_layers=3, input_dim=args.n_mels, hidden_dim=128, label_dim=args.n_class)
 print("\nCreating experiment directory: %s" % args.exp_dir)
 os.makedirs("%s/models" % args.exp_dir)
 with open("%s/args.pkl" % args.exp_dir, "wb") as f:

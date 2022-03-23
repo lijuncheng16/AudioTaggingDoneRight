@@ -6,7 +6,8 @@
  - [AudioSet Recipe](#Audioset-Recipe)
  - [Contact](#Contact)
 
-## This implementation's is based on AST https://github.com/YuanGongND/ast
+### This implementation's is a new iteration of our previous effort: https://github.com/lijuncheng16/AudioSetDoneRight
+and thanks to the other opensourced project AST (https://github.com/YuanGongND/ast), where we used their data loading pipeline, and DeiT implementation.
 ## Getting Started 
 
 **Parameters:**\

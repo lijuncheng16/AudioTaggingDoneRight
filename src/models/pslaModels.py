@@ -5,12 +5,13 @@ from efficientnet_pytorch import EfficientNet
 import torchvision
 
 class ResNetAttention(nn.Module):
-    def __init__(self, label_dim=527, pretrain=True):
+    def __init__(self, args):
         super(ResNetAttention, self).__init__()
-
-        self.model = torchvision.models.resnet50(pretrained=pretrain)
-
-        if pretrain == False:
+        self.__dict__.update(args.__dict__)     # Instill all args into self
+        self.model = torchvision.models.resnet50(pretrained=args.imagenet_pretrain)
+        self.target_length = args.target_length
+        self.n_mels = args.n_mels
+        if args.imagenet_pretrain == False:
             print('ResNet50 Model Trained from Scratch (ImageNet Pretraining NOT Used).')
         else:
             print('Now Use ImageNet Pretrained ResNet50 Model.')
@@ -23,8 +24,8 @@ class ResNetAttention(nn.Module):
 
         # attention pooling module
         self.attention = Attention(
-            2048,
-            label_dim,
+            832, #2048 originally
+            args.n_class,
             att_activation='sigmoid',
             cla_activation='sigmoid')
         self.avgpool = nn.AvgPool2d((4, 1))
@@ -35,8 +36,14 @@ class ResNetAttention(nn.Module):
         x = x.transpose(2, 3)
 
         batch_size = x.shape[0]
+#         print("resnet input x shape:", x.shape)
         x = self.model(x)
-        x = x.reshape([batch_size, 2048, 4, 32])
+        
+#         print("resnet output x shape:", x.shape)
+        if self.n_mels == 128:
+            x = x.reshape([batch_size, 2048, 4, self.n_mels//4 ]) #batch, 2048, 4, 32
+        elif self.n_mels == 64:
+            x = x.reshape([batch_size, 832, 4, self.n_mels//4 ])#batch, 832, 4, 16
         x = self.avgpool(x)
         x = x.transpose(2,3)
         out, norm_att = self.attention(x)
@@ -114,8 +121,8 @@ class EffNetAttention(nn.Module):
 
 if __name__ == '__main__':
     input_tdim = 1056
-    #ast_mdl = ResNetNewFullAttention(pretrain=False)
-    psla_mdl = EffNetFullAttention(pretrain=False, b=0, head_num=0)
+    ast_mdl = ResNetAttention(pretrain=False)
+#     psla_mdl = EffNetFullAttention(pretrain=False, b=0, head_num=0)
     # input a batch of 10 spectrogram, each with 100 time frames and 128 frequency bins
     test_input = torch.rand([10, input_tdim, 128])
     test_output = psla_mdl(test_input)

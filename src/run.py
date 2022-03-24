@@ -125,7 +125,8 @@ elif args.model == 'TAL':
 elif args.model == 'efficientnet':
     audio_model = models.EffNetAttention(label_dim=args.n_class, b=args.eff_b, pretrain=args.imagenet_pretrain, head_num=args.att_head)
 elif args.model == 'resnet':
-    audio_model = models.ResNetAttention(label_dim=args.n_class, pretrain=args.imagenet_pretrain)
+    args.target_length = target_length[args.dataset]
+    audio_model = models.ResNetAttention(args)
 elif args.model == 'mbnet':
     audio_model = models.MBNet(label_dim=args.n_class, pretrain=args.imagenet_pretrain)
 elif args.model == 'linear':

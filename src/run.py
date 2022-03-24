@@ -75,7 +75,7 @@ parser.add_argument('--transformer_dropout', type = float, default = 0.5)
 #psla model
 parser.add_argument("--eff_b", type=int, default=0, help="which efficientnet to use, the larger number, the more complex")
 parser.add_argument("--att_head", type=int, default=4, help="number of attention heads")
-
+parser.add_argument("--att_activation", type = str, default = 'sigmoid', choices = ['sigmoid','softmax','relu','linear'])
 args = parser.parse_args()
 
 
@@ -123,7 +123,7 @@ elif args.model == 'TALtrans':
 elif args.model == 'TAL':
     audio_model = models.TALNet(args)
 elif args.model == 'efficientnet':
-    audio_model = models.EffNetAttention(label_dim=args.n_class, b=args.eff_b, pretrain=args.imagenet_pretrain, head_num=args.att_head)
+    audio_model = models.EffNetAttention(att_act=args.att_activation, label_dim=args.n_class, b=args.eff_b, pretrain=args.imagenet_pretrain, head_num=args.att_head)
 elif args.model == 'resnet':
     args.target_length = target_length[args.dataset]
     audio_model = models.ResNetAttention(args)

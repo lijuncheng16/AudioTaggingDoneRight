@@ -26,20 +26,16 @@ class ResNetAttention(nn.Module):
         self.attention = Attention(
             832, #2048 originally
             args.n_class,
-            att_activation='sigmoid',
-            cla_activation='sigmoid')
+            att_activation=args.att_activation,
+            cla_activation=args.att_activation)
         self.avgpool = nn.AvgPool2d((4, 1))
 
     def forward(self, x):
         # expect input x = (batch_size, time_frame_num, frequency_bins), e.g., (12, 1024, 128)
         x = x.unsqueeze(1)
         x = x.transpose(2, 3)
-
         batch_size = x.shape[0]
-#         print("resnet input x shape:", x.shape)
         x = self.model(x)
-        
-#         print("resnet output x shape:", x.shape)
         if self.n_mels == 128:
             x = x.reshape([batch_size, 2048, 4, self.n_mels//4 ]) #batch, 2048, 4, 32
         elif self.n_mels == 64:
@@ -68,7 +64,7 @@ class MBNet(nn.Module):
 
 
 class EffNetAttention(nn.Module):
-    def __init__(self, label_dim=527, b=0, pretrain=True, head_num=4):
+    def __init__(self, att_act='sigmoid', label_dim=527, b=0, pretrain=True, head_num=4):
         super(EffNetAttention, self).__init__()
         self.middim = [1280, 1280, 1408, 1536, 1792, 2048, 2304, 2560]
         if pretrain == False:
@@ -83,24 +79,24 @@ class EffNetAttention(nn.Module):
             self.attention = MHeadAttention(
                 self.middim[b],
                 label_dim,
-                att_activation='sigmoid',
-                cla_activation='sigmoid')
+                att_activation = att_act,
+                cla_activation= att_act)
         # single-head attention pooling
         elif head_num == 1:
             print('Model with single attention heads')
             self.attention = Attention(
                 self.middim[b],
                 label_dim,
-                att_activation='sigmoid',
-                cla_activation='sigmoid')
+                att_activation = att_act,
+                cla_activation = att_act)
         # mean pooling (no attention)
         elif head_num == 0:
             print('Model with mean pooling (NO Attention Heads)')
             self.attention = MeanPooling(
                 self.middim[b],
                 label_dim,
-                att_activation='sigmoid',
-                cla_activation='sigmoid')
+                att_activation = att_act,
+                cla_activation = att_act)
         else:
             raise ValueError('Attention head must be integer >= 0, 0=mean pooling, 1=single-head attention, >1=multi-head attention.')
 

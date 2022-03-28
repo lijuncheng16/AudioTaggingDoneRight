@@ -68,3 +68,8 @@ Please cite our paper(s) if you find this repository useful.
   copyright = {arXiv.org perpetual, non-exclusive license}
 }
 ```  
+
+## Contact
+Feel free to shoot me an email at junchenl@cs.cmu.edu in case you have long questions.
+For short questions, Twitter DM @JunchengLi
+Or just submit an issue here.

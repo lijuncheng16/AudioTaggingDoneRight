@@ -1,13 +1,17 @@
 
 # AudioTagging Done Right: 2nd comparison of deep learning methods for environmental sound classification
- - [News](#News)
  - [Introduction](#Introduction)
  - [Citing](#Citing)  
  - [AudioSet Recipe](#Audioset-Recipe)
  - [Contact](#Contact)
+## Introduction  
+This repository is the implementation of our submission to InterSpeech 2022: https://arxiv.org/abs/2203.13448 with the same title of the repository.
+#### This implementation's is a new iteration of our previous effort: https://github.com/lijuncheng16/AudioSetDoneRight
+We still maintain our previous repo for testing/probing the model. This repository is mainly for training models.
+Thanks to the other opensourced project AST (https://github.com/YuanGongND/ast), where we used their data loading pipeline, and DeiT adaptation. 
+The pre-trained DeiT model is loaded from the timm libraray: https://github.com/rwightman/pytorch-image-models (timm version: 0.4.5) newer version of timm changed the API for base-384 of deit, but should still be one liner to load the equivalent or better model.
+Without these opensourced efforts, it would be way less efficient for researchers like us to make things happen.
 
-### This implementation's is a new iteration of our previous effort: https://github.com/lijuncheng16/AudioSetDoneRight
-and thanks to the other opensourced project AST (https://github.com/YuanGongND/ast), where we used their data loading pipeline, and DeiT implementation.
 ## Getting Started 
 
 **Parameters:**\
@@ -51,3 +55,16 @@ To summarize, to use our training pipeline, you need to creat data files and mod
 
 Also, please note that we use `16kHz` audios for the pretrained model, so if you want to use the pretrained model, please prepare your data in `16kHz`.
 
+## Citing
+Please cite our paper(s) if you find this repository useful.
+```  
+@article{li2022ATbaseline,
+  doi = {10.48550/ARXIV.2203.13448},
+  url = {https://arxiv.org/abs/2203.13448},
+  author = {Li, Juncheng B and Qu, Shuhui and Huang, Po-Yao and Metze, Florian},
+  title = {AudioTagging Done Right: 2nd comparison of deep learning methods for environmental sound classification},
+  publisher = {arXiv},
+  year = {2022},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+```  

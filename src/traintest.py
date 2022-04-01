@@ -119,6 +119,8 @@ def train(audio_model, train_loader, test_loader, args):
             audio_output = audio_model(audio_input)
             if isinstance(loss_fn, torch.nn.CrossEntropyLoss):
                 loss = loss_fn(audio_output, torch.argmax(labels.long(), axis=1))
+            elif isinstance(loss_fn, torch.nn.BCEWithLogitsLoss):
+                loss = loss_fn(audio_output, labels)
             else:
                 epsilon = 1e-7
                 audio_output = torch.clamp(audio_output, epsilon, 1. - epsilon)

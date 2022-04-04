@@ -1,7 +1,10 @@
 BSD 3-Clause License
 
-Copyright (c) 2021, Yuan Gong
-All rights reserved.
+Copyright (c) 2021, Juncheng B Li
+This implementation contains non-trival amount of reimplementation and modification on top of the original copyright owner:
+Yuan Gong's source code.
+All rights to the modification reserved by Juncheng B Li. 
+Others please see the original repository
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

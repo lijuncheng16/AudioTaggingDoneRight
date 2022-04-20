@@ -23,6 +23,15 @@ Without these opensourced efforts, it would be way less efficient for researcher
 `imagenet_pretrain`: If `True`, use ImageNet pretrained model. (default: `True`, we recommend to set it as `True` for all tasks.)\
 `audioset_pretrain`: If`True`,  use full AudioSet And ImageNet pretrained model. Currently only support `base384` model with `fstride=tstride=10`. (default: `False`, we recommend to set it as `True` for all tasks except AudioSet.)\
 `model_size`: The model size of AST, should be in `[tiny224, small224, base224, base384]` (default: `base384`).
+`mean`: The mean value of the features, note this has to be recomputed for different data augmentation.
+`std`: Standard deviation of the features.
+`freqm`, `timem`: time and frequency mask length for SpecAugmentation.
+*For TALtrans Models*
+`embedding_size`: embedding size 
+`n_conv_layers`: number of conv layers before the bottleneck, default set to 10
+`n_pool_layers`: number of pooling layers before the bottleneck, default set to 5
+`n_trans_layers`: number of transformer block layers
+`kernel_size`: conv kernel size
 
 **Input:** Tensor in shape `[batch_size, temporal_frame_num, frequency_bin_num]`. Note: the input spectrogram should be normalized with dataset mean and std.
 **Output:** Tensor of raw logits (i.e., without Sigmoid) in shape `[batch_size, label_dim]`.

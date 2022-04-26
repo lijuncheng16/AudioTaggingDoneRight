@@ -3,6 +3,7 @@
  - [Introduction](#Introduction)
  - [Citing](#Citing)  
  - [AudioSet Recipe](#Audioset-Recipe)
+ - [Neural Models](#Models)
  - [Contact](#Contact)
 ## Introduction  
 This repository is the implementation of our submission to InterSpeech 2022: https://arxiv.org/abs/2203.13448 with the same title of the repository.
@@ -54,9 +55,13 @@ cd ~/egs/audioset
 ./run-{modelrecipe_name}.sh
 
 
-3. In ``~/src/run.py``, line 60-65, you need to add the normalization stats, the input frame length, and if noise augmentation is needed for your dataset. Also take a look at line 101-127 if you have a seperate validation set. For normalization stats, you need to compute the mean and std of your dataset (check ``ast/src/get_norm_stats.py``) or you can try using our AudioSet normalization ``input_spec = (input_spec + mean) / (std * 2)``.
+3. In ``~/src/run.py``, line 33-34, you need to add the normalization stats, the input frame length, and if noise augmentation is needed for your dataset. For normalization stats, you need to compute the mean and std of your dataset (check ``ast/src/get_norm_stats.py``) or you can try using our AudioSet normalization ``input_spec = (input_spec + mean) / (std * 2)``. See our explanation about why is it 2 sigma in our paper.
 
 Also, please note that we use `16kHz` audios for the pretrained model, so if you want to use the pretrained model, please prepare your data in `16kHz`.
+
+## Models
+Currently, you will see implementations of CRNN, CNNTransformer, Transformer, ViT(AST), PSLA, ResNet in this repository.
+We will include more models while we make updates to our project.
 
 ## Citing
 Please cite our paper(s) if you find this repository useful.

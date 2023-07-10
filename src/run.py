@@ -94,15 +94,21 @@ if args.bal == 'bal':
     print('balanced sampler is being used')
     samples_weight = np.loadtxt(args.data_train[:-5]+'_weight.csv', delimiter=',')
     sampler = WeightedRandomSampler(samples_weight, len(samples_weight), replacement=True)
-
     train_loader = torch.utils.data.DataLoader(
         dataloader.AudiosetDataset(args.data_train, label_csv=args.label_csv, audio_conf=audio_conf),
         batch_size=args.batch_size, sampler=sampler, num_workers=args.num_workers, pin_memory=True)
 elif args.bal == 'over':
     print('over sampler is being used')
-    samples_weight = np.loadtxt(args.data_train[:-5]+'__oversample_weight.csv', delimiter=',')
+    samples_weight = np.loadtxt(args.data_train[:-5]+'_oversample_weight.csv', delimiter=',')
     sampler = WeightedRandomSampler(samples_weight, len(samples_weight), replacement=True)
-
+    train_loader = torch.utils.data.DataLoader(
+        dataloader.AudiosetDataset(args.data_train, label_csv=args.label_csv, audio_conf=audio_conf),
+        batch_size=args.batch_size, sampler=sampler, num_workers=args.num_workers, pin_memory=True)
+elif args.bal == 'multinomial':
+    print('over sampler and multinomial mixup is being used')
+    samples_weight = np.loadtxt(args.data_train[:-5]+'_oversample_weight.csv', delimiter=',')
+    sampler = WeightedRandomSampler(samples_weight, len(samples_weight), replacement=True)
+    audio_conf['samples_weight'] = samples_weight
     train_loader = torch.utils.data.DataLoader(
         dataloader.AudiosetDataset(args.data_train, label_csv=args.label_csv, audio_conf=audio_conf),
         batch_size=args.batch_size, sampler=sampler, num_workers=args.num_workers, pin_memory=True)

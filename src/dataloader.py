@@ -95,7 +95,7 @@ class AudiosetDataset(Dataset):
         print('number of classes is {:d}'.format(self.label_num))
 
     def _wav2fbank(self, filename, filename2=None):
-        # mixup
+        # no mixup
         if filename2 == None:
             waveform, sr = torchaudio.load(filename)
             waveform = waveform - waveform.mean()
@@ -161,10 +161,14 @@ class AudiosetDataset(Dataset):
         if random.random() < self.mixup:
             datum = self.data[index]
             # find another sample to mix, also do balance sampling
-            # sample the other sample from the multinomial distribution, will make the performance worse
-            # mix_sample_idx = np.random.choice(len(self.data), p=self.sample_weight_file)
-            # sample the other sample from the uniform distribution
-            mix_sample_idx = random.randint(0, len(self.data)-1)
+                # sample the other sample from the multinomial distribution, will make the performance worse
+            if 'samples_weight' in self.audio_conf.keys():
+                samples_weight = self.audio_conf.get('samples_weight')
+                samples_weight = samples_weight / samples_weight.sum()
+                mix_sample_idx = np.random.choice(len(self.data), p=samples_weight)
+            else:
+                # sample the other sample from the uniform distribution
+                mix_sample_idx = random.randint(0, len(self.data)-1)
             mix_datum = self.data[mix_sample_idx]
             # get the mixed fbank
             fbank, mix_lambda = self._wav2fbank(datum['wav'], mix_datum['wav'])
